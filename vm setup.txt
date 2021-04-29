@@ -1,0 +1,90 @@
+** change the ip address **
+
+ssh -i "~/keypair.pem" ubuntu@3.233.31.92
+
+sudo apt update
+sudo apt upgrade -y
+sudo apt install nginx mariadb-server mariadb-client libmariadb3
+iptables -I INPUT -p tcp --dport 22 -i eth0 -m state --state NEW -m recent --set
+iptables -I INPUT -p tcp --dport 22 -i eth0 -m state --state NEW -m recent --update --seconds 60 --hitcount 4 -j DROP
+
+(From local machine terminal - not SSH)
+scp -i "~/keypair.pem" /mnt/c/Users/dabbo/Programming/EventOrgSite/server.cert ubuntu@3.233.31.92:
+scp -i "~/keypair.pem" /mnt/c/Users/dabbo/Programming/EventOrgSite/server.key ubuntu@3.233.31.92:
+
+scp -i "~/keypair.pem" /etc/nginx/sites-enabled/EventOrganiser ubuntu@3.233.31.92:
+scp -i "~/keypair.pem" -r /mnt/c/Users/dabbo/Programming/EventOrgSite/EventOrgStatic ubuntu@3.233.31.92:
+scp -i "~/keypair.pem" ~/Backend/server ubuntu@3.233.31.92:
+scp -i "~/keypair.pem" ~/S3Backup/backup ubuntu@3.233.31.92:
+scp -i "~/keypair.pem" ~/Backend/config ubuntu@3.233.31.92:
+
+
+
+SSH
+
+sudo mv server.cert /var/www/cert.pem
+sudo mv server.key /var/www/key.pem
+sudo mkdir /var/www/EventOrgStatic
+sudo chown -R $USER:$USER /var/www/EventOrgStatic/
+sudo chmod -R 755 /var/www/EventOrgStatic/
+sudo mv EventOrganiser /etc/nginx/sites-available/EventOrganiser
+sudo ln -s /etc/nginx/sites-available/EventOrganiser /etc/nginx/sites-enabled/
+sudo rm /etc/nginx/sites-enabled/default
+mv EventOrgStatic/* /var/www/EventOrgStatic/
+rm -r EventOrgStatic/
+
+# This takes a while
+openssl dhparam 2048 -out /var/www/dhparams.pem
+
+sudo service nginx start
+
+sudo service mysql start
+sudo mysql_secure_installation
+
+sudo mysql
+    UPDATE mysql.user SET plugin = '' WHERE plugin = 'unix_socket';
+    FLUSH PRIVILEGES;
+        
+copy contents of event organisation site.sql to data.sql
+mysql -u root -p eventorg < data.sql
+
+** see Backup Instructions.txt
+
+To enable an EC2 server to access S3:
+https://aws.amazon.com/premiumsupport/knowledge-center/ec2-instance-access-s3-bucket/
+policy:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+
+Edit the config file
+    Set the domain name, database name, database password etc.
+
+
+Server can be run with ./server
+
+Alternatively, it can be run with
+    rm server.log server_error.log
+    (./server > server.log 2> server_error.log &)&
+which allows the terminal session to be closed without killing the server process.
+
+To kill the server process, run 
+    pidof server 
+which returns the PID and then run
+    kill [PID]
+
+
+If the server is restarted then run:
+    sudo nginx
+    

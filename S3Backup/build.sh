@@ -1,0 +1,1 @@
+g++ S3Backup.cpp -o backup -O2 -laws-cpp-sdk-s3 -laws-cpp-sdk-core -laws-c-event-stream -laws-checksums -laws-c-common -lcurl -lssl -lcrypto -lpthread

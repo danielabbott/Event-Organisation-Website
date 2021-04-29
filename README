@@ -1,0 +1,4 @@
+To build, run make in the S3Backup and Backend folders.
+Server can be run locally using the self-signed test certificate & key but file uploads won't work
+	Certificate files go in /var/www/cert.pem and /var/www/key.pem
+See vm setup.txt for instructions on setting up an EC2 server. Every occurrence of 'da-event-org' and 'us-east-1' in the codebase and nginx configuration need to be replaced with the name and region of the S3 storage bucket being used.

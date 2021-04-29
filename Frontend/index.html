@@ -1,0 +1,460 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<title>Event Organisation Website</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="style.css">
+
+	<!-- Make sure these are all pushed by the web server -->
+	<script src="UIVisibility.js" defer></script>
+	<script src="util.js" defer></script>
+	<script src="Comments.js" defer></script>
+	<script src="init.js" defer></script>
+
+	<link rel="preconnect" href="https://da-event-org.s3.amazonaws.com">
+
+</head>
+
+<body>
+
+
+	<noscript>
+		You need to enable JavaScript to use this website.
+	</noscript>
+
+	<div id="pageOuter">
+	</div>
+	<div id="page" hidden>
+		<!-- Homepage -->
+
+		<div id="page_" hidden>
+
+			<br>
+			<br>
+			<form id="homepage_filters">
+				<input type="text" id="homepage_name" placeholder="Filter by name...">
+				<input type="text" id="homepage_location" placeholder="Filter by location...">
+				<input type="submit" id="homepage_filter_go" value="Go" class="greyButton">
+			</form>
+			<br>
+
+			<br>
+
+			<div id="homepage_events" class="page_dynamic_content"></div>
+			
+			<br>
+		</div>
+
+		<!-- Password Reset Page -->
+
+		<div id="page_password_reset" hidden>
+
+			<h1 class="CenterText">Password Reset</h1><br>
+
+			<div id="pwdResetShowAfterConfirmCode" hidden>
+
+				<p class="CenterText">Reset password for <span id="pwdResetEmail1"></span><br></p><br>
+				<p class="CenterText">Password reset link expires in <span id="pwdResetExpiresIn"></span> minutes<br></p><br>
+
+				<form id="pwdResetForm">
+					<div class="grid2col">
+						<label>Password</label>
+						<input type="password" id="pwdResetPassword" name="password" required>
+
+						<label>Confirm Password&emsp;</label>
+						<input type="password" id="pwdResetConfirmPassword" required>
+					</div>
+					<br>
+					<input type="submit" value="Change Password" class="greyButton width100pc">
+					<br><br>
+				</form> 
+			</div>
+
+			<br>
+		</div>
+
+		<!-- Event Page -->
+
+		<div id="page_event" hidden>
+			<br>	
+			<div id="eventPageLayout">
+				<div id="eventViewBannerContainer">
+					<img id="eventViewBanner" hidden>
+
+					<img data-lazy-load-src="ico/trash.svg" id="deleteCoverImageButton" title="delete" hidden>
+					<button class="greyButton" id="uploadCoverImage">Upload cover image</button>
+				</div>
+				<div id="eventTitleSection">
+					<h1 id="eventName"></h1>
+				</div>
+				<div id="eventInfo0Section">
+
+					<p>Organised by <span id="organiserName"></span></p>
+					<p id="url"></p>
+					<div id="eventOver" hidden>
+						<b>This event is now over</b>
+					</div>
+					<div id="eventInProgress" hidden>
+						<b>This event is happening now</b>
+					</div>
+				</div>
+				<div id="eventInfo1Section">
+					<span><img id="publicPrivateEventIcon" data-lazy-load-src="ico/padlock-unlock.svg" width="20px" height="20px">&emsp;<span id="publicPrivateEvent"></span></span>
+					<p id="eventDateTime"/>
+					<p id="eventDuration"/>
+					<p id="eventCountry"></p>
+					<p id="eventAddress"></p>
+					<p id="eventGPS"></p>
+				</div>
+				<div id="eventViewEditButtonsSection">
+					<img data-lazy-load-src="ico/pencil.svg" id="editEventButton" title="edit"> <!-- Edit&emsp; -->
+					<img data-lazy-load-src="ico/trash.svg" id="deleteEventButton" title="delete"> <!-- Delete -->
+				</div>
+				<p id="description"></p>
+			</div>
+
+			<div id="eventMedia">
+			</div>
+			<br>
+			<button id="addMedia" class="greyButton">Add Media</button>
+
+			<button id="bAttend" class="greyButton width100pc largeText"></button>
+			
+			<button id="bCalandar" class="greyButton">Add to Calendar</button>
+
+			<button id="bShowAttendees" class="greyButton">Show Attendees List</button>
+			<div id="attendeesList"></div>
+			<br>
+			
+			<div id="youtube_vid"></div>
+
+
+			<br>
+			<p id="eventExtendedDescription" class="width100pc"></p>
+
+			<span id="commentsSectionStart"></span>
+			<h2>Comments</h2>
+			<div id="comments">
+			</div>
+
+			<br>
+			<div><button class="greyButton alignCentre" id="loadMoreComments">Load more comments</button></div>
+
+			<br><br><h3>Add Comment</h3>
+			<div id="addCommentSectionEnabled">
+				<textarea id="addCommentTextArea" class="commentTextArea"></textarea>
+				<button class="greyButton" id="addComment">Add comment</button>
+			</div>
+			<div id="addCommentSectionDisabled" hidden>
+				<i>Log in to join the conversation</i>
+			</div>
+			<div id="addCommentSectionDisabledNoComments" hidden>
+				<i>Log in to start the conversation</i>
+			</div>
+			<br><br>
+		</div>
+
+
+		<!-- Edit Event Page -->
+
+		<div id="page_editEvent" hidden>
+
+			<form id="editEventForm">
+				<br>
+				<div id="EventEditPageRow">
+					<h1 id="editEventPageTitle"></h1>
+					<button class="blueButton bigButton" id="editEventSave2">Save</button>
+				</div>
+				<br>
+
+				<h3>Title</h3>
+				<input type="text" id="ee_name" class="width100pc" required>
+				<br><br><br>
+
+
+				<h3>Public/Private</h3>
+				Public
+				<input type="checkbox" id="ee_public" checked><br><br>
+				<span id="eePublicWarning">Public events appear on the home page and any user can join the event.</span><br><br>
+
+
+				<h3>Description</h3>
+				<textarea id="ee_description" class="width100pc" rows="10" required></textarea><br><br>
+
+				
+
+
+				<h3>URL</h3>
+				<i>Optional</i><br><br>
+				<input type="text" id="ee_url" class="width100pc">
+				<br><br><br>
+
+				<h3>Attendees list</h3>
+				Keep attendees list private (public events only)&emsp;
+				<input type="checkbox" id="ee_attendeesListPrivate">
+				<br><br><br>
+
+				<h3>Date and Time</h3>
+				Date&emsp;<input type="date" id="ee_date" min="2020-11-23" required><br><br>
+				Time&emsp;<input type="time" id="ee_time" required>&emsp;&emsp;
+				Time Zone (GMT+X)&emsp;<input type="number" id="ee_timeZone" min="-11" max="12" required><br><br>
+				Duration&emsp;<input type="number" id="ee_durationHours" min="0" max="48" maxlength="2" required> hours <input type="number" id="ee_durationMinutes" min="0" max="59" maxlength="2" required> minutes<br><br>
+
+
+				<h3>Location</h3>
+				Country/Online&emsp;&emsp;&emsp;
+				<span id="ee_countryCode_container">
+				<select id="ee_countryCode">
+					<option value="0">Online</option>
+					<option value="1">United Kingdom</option>
+				</select>
+				</span><br><br>
+
+
+				Postcode / Zip Code&emsp;<input id="ee_postCode" maxlength="11"><br><br>
+
+				GPS&emsp;<input type="number" id="ee_gpsLat" min="-90" max="90" step="any">&emsp;<input type="number" id="ee_gpsLong" min="-180" max="180" step="any">&emsp;
+				<button id="eeUseCurrentLocation" type="button">Use Current Location</button>
+				<br><br>
+
+				Address&emsp;<br>
+				<textarea rows="5" cols="20" id="ee_address"></textarea><br><br>
+
+				<h3>YouTube Video ID</h3>
+				<i>Optional</i><br><br>
+				<input type="text" id="ee_youtubeVideoCode" cols="11" maxlength="11">
+
+
+				<h3>Extra Details</h3>
+				<i>Optional</i><br><br>
+				<textarea id="ee_description2" class="width100pc" rows="10"></textarea><br><br>
+
+
+				<div id="ee_invites_section">
+					<h3>Invitations</h3>
+					<i>Invited users will receive an invitation email when you publish your event. If you are creating a private event then only users whose email address is on the invitee list will be able to view the event page.</i><br><br>
+					<div id="ee_emails"></div>
+
+					<button id="ee_addEmail" type="button">Add Email</button>
+				</div>
+
+				
+				<br><br>
+
+				<button id="editEventSave1" class="blueButton bigButton">Save</button>
+				<button id="editEventPublish" class="redButton bigButton">Publish</button>
+				<br><br><br><br><br>
+
+
+			</form>
+
+
+		</div>
+
+		<!-- My Events Page -->
+
+		<div id="page_myEvents" hidden>
+
+			<h1 class="CenterText">Hosted Events</h1><br>
+
+			<div id="my_events" class="page_dynamic_content"></div>
+		</div>
+
+		<!-- Upcoming Events Page -->
+
+		<div id="page_upcomingEvents" hidden>
+
+			<h1 class="CenterText">Your Events</h1><br>
+
+			<div id="upcoming_events" class="page_dynamic_content"></div>
+		</div>
+
+		<!-- Invitations Page -->
+
+		<div id="page_invitations" hidden>
+
+			<h1 class="CenterText">Invitations</h1><br>
+
+			<div id="events_invitited_to" class="page_dynamic_content"></div>
+		</div>
+
+		
+
+		<!-- User Profile Page -->
+
+		<div id="page_user" hidden>
+
+			<div id="userProfileContainer">
+				<img id="profilePicture">
+				<br><br>
+				<div id="notMyProfileElements">
+					<span id="profileName"></span>
+					<br>
+					<p id="profileBIO"></p>
+					<br>
+					<button id="followButton" class="greyButton">Follow</button>
+					<br>
+				</div>
+				<div id="myProfileElements">
+					<button id="profileAddPic" class="greyButton">Add Profile Picture</button><br><br>
+					<button id="profileRmPic" class="greyButton">Remove Profile Picture</button><br><br>
+					<textarea id="profileNameEdit" placeholder="Enter your name here"></textarea>
+					<br><br>
+					<textarea id="profileBIOEdit" placeholder="Say something about yourself..."></textarea>
+					<br><br>
+					<button id="profileBIOSave" class="greyButton">Save Changes</button>
+					<br>
+				</div>
+				<button id="toggleModStatus" class="greyButton"></button>
+				<p id="userModeratorAdminStatus"></p>
+				<br><br><br>
+			</div>
+		</div>
+
+		<br><br>
+		<div id="footer">Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" target=”_blank”>Dave Gandy</a> from <a href="https://www.flaticon.com/" target=”_blank”>www.flaticon.com</a></div>
+	</div>
+
+	<div class="loadingio-spinner-rolling-8kavuhbv1u5"><div id="loadingSymbol" class="ldio-pbx3l5yii9g">
+	<div></div>
+	</div></div>
+
+
+	<div id="navbar">
+		<img id="hamburgerIcon" src="ico/reorder-option.svg">
+		<div id="navbarSpace"></div>
+		<div id="bellIconContainer">
+			<img id="bellIcon" src="ico/bell-musical-tool.svg">
+			<span id="notificationsNumber" hidden></span>
+		</div>
+		<div id="navbar_prof_pic_and_name">
+			<img id="navbar_prof_pic" hidden>
+			<div id="navbar_name_"><span id="navbar_name"></span></div>
+			<img id="navbar_prof_pic_and_name_down_arrow" src="ico/angle-arrow-down.svg" width="10px" height="10px">
+		</div>
+	</div>
+
+	<!-- Notifications -->
+
+	<div id="notificationsDropdown" class="dropdownMenu" hidden>
+
+	</div>
+
+
+	<!-- Log in Dropdown -->
+
+	<div id="loginForm" class="dropdownMenu" hidden>
+		<form>
+			<div class="grid2col">
+				<label>Email&emsp;</label>
+				<input type="text" id="loginEmail" name="email" required>
+				<label>Password&emsp;</label>
+				<input type="password" id="loginPassword" name="password" required>
+			</div>
+			<br>
+
+			<input type="submit" value="Log In" class="greyButton width100pc">
+			<div></div>
+			<br>
+		</form> 
+		<button class="greyButton width100pc" id="switchToSignupForm">Create Account</button><br><br>
+		<button class="greyButton width100pc" id="switchToPwdResetForm">Forgot Password</button><br>
+	</div>
+
+	<!-- Sign up Dropdown -->
+
+	<div id="signUpForm" class="dropdownMenu" hidden>
+		<form>
+
+			<div class="grid2col">
+				<label>Email</label>
+				<input type="text" id="signUpEmail" name="email" required>
+			
+				<label>Name</label>
+				<input type="text" id="signUpName" required>
+			
+				<label>Password</label>
+				<input type="password" id="signUpPassword" name="password" required>
+			
+				<label>Confirm Password&emsp;</label>
+				<input type="password" id="signUpConfirmPassword" required>
+			</div>
+			<br>
+
+			<input type="submit" value="Create Account" class="greyButton width100pc">
+			<br><br>
+		</form> 
+		<button class="greyButton width100pc" id="switchToLoginForm">Log in Instead</button><br>
+	</div>
+
+	<!-- Password Reset Dropdown -->
+
+	<div id="passwordResetForm" class="dropdownMenu" hidden>
+		<form>
+			<div class="grid2col">
+				<label>Email&emsp;</label>
+				<input type="text" id="pwdResetEmail" name="email" required>
+			</div>
+
+			<br>
+			<input type="submit" value="Send Password Reset Email" class="greyButton width100pc">
+			<br>
+		</form>
+	</div>
+
+	<!-- User Settings Dropdown -->
+
+	<div id="userDropdown" class="dropdownMenu" hidden>
+		<span id="usersEmail"></span><br><br>
+		<button id="logOut" class="greyButton">Log out</button>
+	</div>
+
+	<!-- Navigation Dropdown -->
+
+	<div id="lhsDropdownMenu" hidden>
+		<p id="nav_home">Home</p>
+		<p id="nav_upcoming_events">Your Events</p>
+		<p id="nav_invitations">Invitations</p>
+		<p id="nav_my_events">Hosted Events</p>
+		<!-- <p><del>Following</del></p>
+		<p><del>Previous Events</del></p> -->
+		<p id="nav_create_event">Create Event</p>
+	</div>
+
+	<div id="hideScreen" hidden></div>
+
+	<div id="uploadCoverImageFormArea" class="popupForm" hidden>
+		<form id="uploadCoverImageForm">
+			<label>Select an image file</label><br><br>
+			<input type="file" id="addCoverImageFile" accept="image/png, image/jpeg, image/webp, image/svg+xml, image/apng" required><br><br>
+			<input type="submit" value="Add cover image" class="greyButton width100pc">
+		</form>
+	</div>
+
+	<div id="uploadMediaFormArea" class="popupForm" hidden>
+		<form id="uploadMediaForm">
+			<label>Select a file</label><br><br>
+			<input type="file" id="addMediaFile" required><br><br>
+			<input type="submit" value="Add media file" class="greyButton width100pc">
+		</form>
+	</div>
+
+	<div id="uploadProfilePictureFormArea" class="popupForm" hidden>
+		<form id="uploadProfilePictureForm">
+			<label>Select an image file</label><br><br>
+			<input type="file" id="addProfilePictureFile" accept="image/png, image/jpeg, image/webp, image/svg+xml, image/apng" required><br><br>
+			<input type="submit" value="Upload profile picture" class="greyButton width100pc">
+		</form>
+	</div>
+
+	
+
+	<!-- Remove in production -->
+	<!-- <script src="TEST.js"></script> -->
+</body>
+</html>

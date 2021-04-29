@@ -1,0 +1,8 @@
+# Check file has unix line endings
+database_name=eventorg
+database_username=cpp
+database_password=DB_PASSWORD_GOES_HERE
+website_url=MYDOMAINNAME.COM
+max_accounts_per_ip_per_day=200
+email_account=GMAIL_EMAIL_GOES_HERE
+email_password=GMAIL_PASSWORD_GOES_HERE

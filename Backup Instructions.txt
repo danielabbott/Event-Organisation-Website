@@ -1,0 +1,19 @@
+Full backup creation:
+
+sudo crontab -e
+1 3 * * * sudo mariabackup --tables-exclude="Sessions|PasswordResets|Spam" --user=root --password=AlphonseElric --backup --stream=xbstream 2> /home/ubuntu/mariabackup.log | zstd | openssl  enc -aes-128-cbc -k 9bf2118f34d9ab71c1d51f8c671a7ffb | /home/ubuntu/backup > /home/ubuntu/backup.log
+
+^ runs at 3am each day
+
+Restore from full backup:
+
+cd /var/lib/mysql
+rm -r ./*
+
+Go to file on AWS s3. 
+Object actions -> Download as
+Copy the URL from the hyperlink and use it in the curl command below
+
+curl "URL GOES HERE" | openssl  enc -d -aes-128-cbc -k 9bf2118f34d9ab71c1d51f8c671a7ffb | zstd -d | sudo mbstream -x
+
+sudo chown -R mysql:mysql /var/lib/mysql/
